@@ -5,7 +5,7 @@ import com.andersenlab.mylivecoding.data.repository.local.mock.TransferMockData
 import com.andersenlab.mylivecoding.domain.model.TransferDomain
 import com.andersenlab.mylivecoding.domain.repository.TransferRepository
 
-class TransfersLocalRepositoryImpl : TransferRepository {
+class TransferLocalRepositoryImpl : TransferRepository {
 
     override suspend fun getAllTransfers() : List<TransferDomain> {
         return TransferMockData.transfers.map { TransferItemMapper.toDomain(it) }

@@ -1,5 +1,7 @@
 package com.andersenlab.mylivecoding.di
 
+import com.andersenlab.mylivecoding.data.repository.remote.TransfersAPI
+import com.andersenlab.mylivecoding.data.repository.remote.TransfersRemoteRepositoryImpl
 import com.andersenlab.mylivecoding.domain.repository.TransferRepository
 import com.andersenlab.mylivecoding.domain.usecase.GetAllTransfersUseCase
 import dagger.Module
@@ -18,5 +20,13 @@ object DomainModule {
         transferRepository: TransferRepository
     ): GetAllTransfersUseCase {
         return GetAllTransfersUseCase(transferRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTransferRepository(
+        transfersApi: TransfersAPI
+    ): TransferRepository {
+        return TransfersRemoteRepositoryImpl(transfersApi)
     }
 }

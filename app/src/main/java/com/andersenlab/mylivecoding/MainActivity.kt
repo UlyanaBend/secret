@@ -1,49 +1,35 @@
 package com.andersenlab.mylivecoding
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.andersenlab.mylivecoding.ui.theme.MyLiveCodingTheme
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.andersenlab.mylivecoding.databinding.MainActivityBinding
+import com.andersenlab.mylivecoding.ui.adapter.TransferAdapter
+import com.andersenlab.mylivecoding.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyLiveCodingTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
+
+        lateinit var binding: MainActivityBinding
+        lateinit var adapter: TransferAdapter
+
+        binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val mainViewModel: MainViewModel by viewModels()
+
+        adapter = TransferAdapter()
+        binding.rvTransfersList.layoutManager = LinearLayoutManager(this)
+        binding.rvTransfersList.adapter = adapter
+
+        mainViewModel.transferList.observe(this, Observer { items ->
+            adapter.submitList(items)
+        })
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyLiveCodingTheme {
-        Greeting("Android")
-    }
-}
